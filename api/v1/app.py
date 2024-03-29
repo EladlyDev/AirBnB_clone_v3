@@ -4,7 +4,7 @@ create an app instanse and register it to app_views
 customize 404 error
 """
 
-from flask import Flask, make_response
+from flask import Flask, make_response, jsonify
 from models import storage
 from api.v1.views import app_views
 from os import environ
@@ -16,7 +16,7 @@ app.register_blueprint(app_views)
 
 @app.errorhandler(404)
 def not_found(err):
-    return make_response({'error': 'Not found'}, 404)
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @app.teardown_appcontext

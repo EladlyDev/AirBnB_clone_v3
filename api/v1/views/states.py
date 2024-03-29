@@ -26,7 +26,7 @@ def states():
             return make_response(jsonify({"error": "Not a JSON"}), 400)
 
         if 'name' not in request.get_json():
-            return make_response(jsonify({"error": "Missing name"}), 400)
+            return abort(400, description="Missing name")
 
         new_state = State(name=request.get_json()['name'])
         storage.new(new_state)
@@ -64,4 +64,4 @@ def state_get(id):
                 setattr(state, k, v)
 
         state.save()
-        return jsonify(state.to_dict())
+        return jsonify(state.to_dict()), 200
