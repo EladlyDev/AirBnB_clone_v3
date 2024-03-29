@@ -1,4 +1,9 @@
 #!/usr/bin/python3
+"""
+create an app instanse and register it to app_views
+customize 404 error
+"""
+
 from flask import Flask, make_response
 from models import storage
 from api.v1.views import app_views

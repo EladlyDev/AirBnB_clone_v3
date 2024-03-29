@@ -1,4 +1,8 @@
 #!/usr/bin/python3
+"""
+Defines a route to show the status of the web app
+Defines a route to show the states of the db
+"""
 from api.v1.views import app_views
 from models import storage
 from models.amenity import Amenity
