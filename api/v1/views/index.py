@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-from flask import jsonify
 from api.v1.views import app_views
 from models import storage
 from models.amenity import Amenity
@@ -13,16 +12,16 @@ from models.user import User
 @app_views.route('/status')
 def status():
     """ returns the status of the service """
-    return jsonify({'status': 'OK'})
+    return {'status': 'OK'}
 
 
 @app_views.route('/stats')
 def stats():
     """ that retrieves the number of each objects by type """
-    return jsonify({'amenities': storage.count(Amenity),
+    return {'amenities': storage.count(Amenity),
             'cities': storage.count(City),
             'places': storage.count(Place),
             'reviews': storage.count(Review),
             'states': storage.count(State),
             'users': storage.count(User),
-            })
+            }
