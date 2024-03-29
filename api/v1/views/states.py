@@ -1,4 +1,12 @@
 #!/usr/bin/python3
+"""
+Defines routes to handle requests to state:
+- get states
+- get state with id
+- create a new state
+- delete a state
+- update a state
+"""
 from api.v1.views import app_views
 from models import storage
 from models.state import State
