@@ -51,7 +51,6 @@ def state_get(id):
     if request.method == 'DELETE':
         storage.delete(state)
         storage.save()
-        del state
         return {}
 
     if request.method == 'PUT':
