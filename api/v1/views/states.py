@@ -10,7 +10,7 @@ Defines routes to handle requests to state:
 from api.v1.views import app_views
 from models import storage
 from models.state import State
-from flask import jsonify, abort, request
+from flask import jsonify, abort, request, make_response
 
 
 @app_views.route('/states', methods=['GET', 'POST'], strict_slashes=False)
@@ -32,10 +32,10 @@ def states():
         storage.new(new_state)
         storage.save()
 
-        return jsonify(new_state.to_dict()), 201
+        return make_response(jsonify(new_state.to_dict()), 201)
 
 
-@app_views.route('/states/<id>', methods=['GET', 'DELETE', 'PUT'],
+@app_views.route('/states/<string:id>', methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
 def state_get(id):
     """ GET, DELETE, PUT requests handler
