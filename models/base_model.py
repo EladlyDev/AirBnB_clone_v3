@@ -49,8 +49,11 @@ class BaseModel:
 
     def __str__(self):
         """String representation of the BaseModel class"""
+        out = dict(self.__dict__)  # dict() so it doesn't effect the origin
+        if '_sa_instance_state' in out:
+            del out['_sa_instance_state']
         return "[{:s}] ({:s}) {}".format(self.__class__.__name__, self.id,
-                                         self.__dict__)
+                                         out)
 
     def save(self):
         """updates the attribute 'updated_at' with the current datetime"""
