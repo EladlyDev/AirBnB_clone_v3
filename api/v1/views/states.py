@@ -32,7 +32,7 @@ def states():
         storage.new(new_state)
         storage.save()
 
-        return jsonify(new_state.to_dict()), 201
+        return make_response(jsonify(new_state.to_dict()), 201)
 
 
 @app_views.route('/states/<string:id>', methods=['GET', 'DELETE', 'PUT'],
