@@ -80,7 +80,7 @@ class DBStorage:
         """Returns the object based on the class and its ID
         None if not found.
         """
-        if cls is not None and id is not None:
+        if cls and id:
             key = cls.__name__ + '.' + id
             return self.all(cls).get(key)
         return None
