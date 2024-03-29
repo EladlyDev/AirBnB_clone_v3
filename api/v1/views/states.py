@@ -23,10 +23,10 @@ def states():
 
     if request.method == 'POST':
         if not request.get_json():
-            return make_response(400, "Not a JSON")
+            return make_response("Not a JSON", 400)
 
         if 'name' not in request.get_json():
-            return make_response(400, "Missing name")
+            return make_response("Missing name", 400)
 
         new_state = State(name=request.get_json()['name'])
         storage.new(new_state)
@@ -57,7 +57,7 @@ def state_get(id):
         data = request.get_json()
 
         if not data:
-            return make_response(400, 'Not a JSON')
+            return make_response('Not a JSON', 400)
 
         for k, v in data.items():
             if k not in ['id', 'created_at', 'updated_at']:
