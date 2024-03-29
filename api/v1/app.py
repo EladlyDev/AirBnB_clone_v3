@@ -18,10 +18,6 @@ app.register_blueprint(app_views)
 def not_found(err):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
-@app.errorhandler(400)
-def custom400(error):
-    return make_response(error.description, 400)
-
 
 @app.teardown_appcontext
 def teardown(exception):

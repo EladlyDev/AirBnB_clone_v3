@@ -23,21 +23,21 @@ def states():
 
     if request.method == 'POST':
         if not request.get_json():
-            abort(400, description="Not a JSON")
+            abort(400, "Not a JSON")
 
         if 'name' not in request.get_json():
-            abort(400, description="Missing name")
+            abort(400, "Missing name")
 
         new_state = State(name=request.get_json()['name'])
         storage.new(new_state)
         storage.save()
 
-        return make_response(jsonify(new_state.to_dict()), 201)
+        return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route('/states/<string:id>', methods=['GET', 'DELETE', 'PUT'],
                  strict_slashes=False)
-def state_get(id):
+def state(id):
     """ GET, DELETE, PUT requests handler
     If the state_id is not linked to any State object, raise a 404 error
     """
@@ -51,17 +51,16 @@ def state_get(id):
     if request.method == 'DELETE':
         storage.delete(state)
         storage.save()
+        del state
         return {}
 
     if request.method == 'PUT':
         data = request.get_json()
 
         if not data:
-            abort(400, description="Not a JSON")
+            abort(400, 'Not a JSON')
 
-        for k, v in data.items():
-            if k not in ['id', 'created_at', 'updated_at']:
-                setattr(state, k, v)
+        state.name = data.get('name', state.name)
 
         state.save()
-        return jsonify(state.to_dict()), 200
+        return jsonify(state.to_dict())
