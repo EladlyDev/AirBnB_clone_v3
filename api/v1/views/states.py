@@ -18,8 +18,9 @@ def states():
     """ Retrieves the list of all State objects """
 
     if request.method == 'GET':
-        states = [state.to_dict() for state in storage.all(State).values()]
-        return jsonify(states)
+        jsonify(list(
+            x.to_dict() for x in list(storage.all(State).values())
+            ))
 
     if request.method == 'POST':
         if not request.get_json():
@@ -46,11 +47,11 @@ def state_get(id):
         abort(404)
 
     if request.method == 'GET':
-        return state.to_dict()
+        return jsonify(state.to_dict())
 
     if request.method == 'DELETE':
         storage.delete(state)
-        del state
+        storage.save()
         return {}
 
     if request.method == 'PUT':
@@ -64,4 +65,4 @@ def state_get(id):
                 setattr(state, k, v)
 
         state.save()
-        return state.to_dict()
+        return jsonify(state.to_dict())
