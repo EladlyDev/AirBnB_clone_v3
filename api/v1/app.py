@@ -20,7 +20,7 @@ def not_found(err):
 
 @app.errorhandler(400)
 def not_json_and_missing_name(err):
-    return str(err), 400
+    return jsonify(error=str(err)), 400
 
 
 @app.teardown_appcontext
