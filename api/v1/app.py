@@ -19,6 +19,11 @@ def not_found(err):
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 
+@app.errorhandler(400)
+def not_json_and_missing_name(err):
+    return jsonify(error=str(err.description)), 400
+
+
 @app.teardown_appcontext
 def teardown(exception):
     """ gets called after each request """

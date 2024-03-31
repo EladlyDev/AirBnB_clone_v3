@@ -1,4 +1,4 @@
-#!/user/bin/python3
+#!/usr/bin/python3
 """ the view for the cities """
 from api.v1.views import app_views
 from flask import jsonify, abort, request
@@ -27,7 +27,7 @@ def cities(state_id):
         data['state_id'] = state_id
         new_city = City(**data)
         new_city.save()
-        return jsonify(new_city.to_dict()), 201
+        return new_city.to_dict(), 201
 
 
 @app_views.route('/cities/<city_id>', methods={'GET', 'DELETE', 'PUT'},
@@ -39,7 +39,7 @@ def city(city_id):
         abort(404)
 
     if request.method == 'GET':
-        return jsonify(city.to_dict())
+        return city.to_dict()
     elif request.method == 'DELETE':
         storage.delete(city)
         storage.save()
@@ -53,4 +53,4 @@ def city(city_id):
             if k not in ['id', 'state_id', 'created_at', 'updated_at']:
                 setattr(city, k, v)
         city.save()
-        return jsonify(city.to_dict())
+        return city.to_dict()

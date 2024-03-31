@@ -23,10 +23,10 @@ def states():
 
     if request.method == 'POST':
         if not request.get_json():
-            abort(400, "Not a JSON")
+            abort(400, description="Not a JSON")
 
         if 'name' not in request.get_json():
-            abort(400, "Missing name")
+            abort(400, description="Missing name")
 
         new_state = State(name=request.get_json()['name'])
         storage.new(new_state)
@@ -58,7 +58,7 @@ def state(id):
         data = request.get_json()
 
         if not data:
-            abort(400, 'Not a JSON')
+            abort(400, description='Not a JSON')
 
         state.name = data.get('name', state.name)
 
