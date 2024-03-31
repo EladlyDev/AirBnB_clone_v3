@@ -62,7 +62,6 @@ def state(id):
             abort(400, description="Not a JSON")
 
         data = request.get_json()
-
         if not data:
             abort(400, description='Not a JSON')
 

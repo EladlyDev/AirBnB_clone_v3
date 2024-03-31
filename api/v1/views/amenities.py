@@ -23,6 +23,9 @@ def amenities():
         return jsonify(amenities)
 
     if request.method == 'POST':
+        if request.content_type != "application/json":
+            abort(400, description="Not a JSON")
+
         if not request.get_json():
             abort(400, description="Not a JSON")
 
@@ -56,8 +59,10 @@ def amenity(id):
         return {}
 
     if request.method == 'PUT':
-        data = request.get_json()
+        if request.content_type != "application/json":
+            abort(400, description="Not a JSON")
 
+        data = request.get_json()
         if not data:
             abort(400, description='Not a JSON')
 

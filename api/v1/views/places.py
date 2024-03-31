@@ -20,6 +20,9 @@ def places(city_id):
         places = [place.to_dict() for place in city.places]
         return jsonify(places)
     elif request.method == 'POST':
+        if request.content_type != "application/json":
+            abort(400, description="Not a JSON")
+
         data = request.get_json()
         if not data:            # ############# checker error might be here
             abort(400, 'Not a JSON')
@@ -51,6 +54,9 @@ def place(place_id):
         storage.save()
         return {}
     elif request.method == 'PUT':
+        if request.content_type != "application/json":
+            abort(400, description="Not a JSON")
+
         data = request.get_json()
         if not data:            # ############# checker error might be here
             abort(400, 'Not a JSON')

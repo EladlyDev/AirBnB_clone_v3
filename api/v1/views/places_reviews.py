@@ -20,6 +20,9 @@ def reviews(place_id):
         reviews = [review.to_dict() for review in place.reviews]
         return jsonify(reviews)
     elif request.method == 'POST':
+        if request.content_type != "application/json":
+            abort(400, description="Not a JSON")
+
         data = request.get_json()
         if not data:            # ############# checker error might be here
             abort(400, 'Not a JSON')
@@ -51,6 +54,9 @@ def review(review_id):
         storage.save()
         return {}
     elif request.method == 'PUT':
+        if request.content_type != "application/json":
+            abort(400, description="Not a JSON")
+
         data = request.get_json()
         if not data:            # ############# checker error might be here
             abort(400, 'Not a JSON')
