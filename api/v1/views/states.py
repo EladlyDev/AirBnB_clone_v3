@@ -22,11 +22,15 @@ def states():
         return jsonify(states)
 
     if request.method == 'POST':
+
+        if request.content_type != "application/json":
+            return abort(400, description='Not a JSON')
+
         if not request.get_json():
-            abort(400, description="Not a JSON")
+            return abort(400, description="Not a JSON")
 
         if 'name' not in request.get_json():
-            abort(400, description="Missing name")
+            return abort(400, description="Missing name")
 
         new_state = State(name=request.get_json()['name'])
         storage.new(new_state)
@@ -55,10 +59,13 @@ def state(id):
         return {}
 
     if request.method == 'PUT':
-        data = request.get_json()
 
+        if request.content_type != "application/json":
+            return abort(400, description='Not a JSON')
+
+        data = request.get_json()
         if not data:
-            abort(400, description='Not a JSON')
+            return abort(400, description='Not a JSON')
 
         state.name = data.get('name', state.name)
 
