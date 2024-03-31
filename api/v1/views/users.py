@@ -26,20 +26,20 @@ def users():
         if request.content_type != "application/json":
             abort(400, description="Not a JSON")
 
-        if not request.get_json():
+        data = request.get_json()
+        if not data:
             abort(400, description="Not a JSON")
 
-        if 'name' not in request.get_json():
+        if 'name' not in data:
             abort(400, description="Missing name")
 
-        if 'email' not in request.get_json():
+        if 'email' not in data:
             abort(400, description="Missing email")
 
-        if 'password' not in request.get_json():
+        if 'password' not in data:
             abort(400, description="Missing password")
 
-        kwrgs = request.get_json()
-        new_user = User(**kwrgs)
+        new_user = User(**data)
         storage.new(new_user)
         storage.save()
 
@@ -73,7 +73,9 @@ def user(id):
         if not data:
             abort(400, description='Not a JSON')
 
-        user.name = data.get('name', user.name)
+        for k, v in data.items():
+            if k not in ['id', 'email', 'created_at', 'updated_at']:
+                setattr(user, k, v)
 
         user.save()
         return jsonify(user.to_dict())
