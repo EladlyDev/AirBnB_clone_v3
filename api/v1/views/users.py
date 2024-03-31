@@ -30,13 +30,13 @@ def users():
         if not kwrgs:
             abort(400, description="Not a JSON")
 
-        if 'name' not in kwrgs:
+        if 'name' not in kwrgs.keys():
             abort(400, description="Missing name")
 
-        if 'email' not in kwrgs:
+        if 'email' not in kwrgs.keys():
             abort(400, description="Missing email")
 
-        if 'password' not in kwrgs:
+        if 'password' not in kwrgs.keys():
             abort(400, description="Missing password")
 
         new_user = User(**kwrgs)
