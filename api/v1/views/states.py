@@ -22,6 +22,9 @@ def states():
         return jsonify(states)
 
     if request.method == 'POST':
+        if request.content_type != "application/json":
+            abort(400, description="Not a JSON")
+
         if not request.get_json():
             abort(400, description="Not a JSON")
 
@@ -55,6 +58,9 @@ def state(id):
         return {}
 
     if request.method == 'PUT':
+        if request.content_type != "application/json":
+            abort(400, description="Not a JSON")
+
         data = request.get_json()
 
         if not data:
