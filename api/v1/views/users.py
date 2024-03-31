@@ -30,9 +30,6 @@ def users():
         if not data:
             abort(400, description="Not a JSON")
 
-        if 'name' not in data:
-            abort(400, description="Missing name")
-
         if 'email' not in data:
             abort(400, description="Missing email")
 
