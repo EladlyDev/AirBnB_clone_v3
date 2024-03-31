@@ -26,19 +26,19 @@ def users():
         if request.content_type != "application/json":
             abort(400, description="Not a JSON")
 
-        kwrgs = request.get_json()
-        if not kwrgs:
+        if not request.get_json():
             abort(400, description="Not a JSON")
 
-        if 'name' not in kwrgs.keys():
+        if 'name' not in request.get_json():
             abort(400, description="Missing name")
 
-        if 'email' not in kwrgs.keys():
+        if 'email' not in request.get_json():
             abort(400, description="Missing email")
 
-        if 'password' not in kwrgs.keys():
+        if 'password' not in request.get_json():
             abort(400, description="Missing password")
 
+        kwrgs = request.get_json()
         new_user = User(**kwrgs)
         storage.new(new_user)
         storage.save()
