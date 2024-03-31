@@ -24,14 +24,16 @@ def reviews(place_id):
             abort(400, description="Not a JSON")
 
         data = request.get_json()
-        if not data:            # ############# checker error might be here
+        if not data:
             abort(400, 'Not a JSON')
+
         if 'user_id' not in data:
             abort(400, 'Missing user_id')
-        if 'name' not in data:
-            abort(400, 'Missing name')
         if not storage.get(User, data['user_id']):
             abort(404)
+
+        if 'text' not in data:
+            abort(400, 'Missing text')
 
         data['place_id'] = place_id
         new_review = Review(**data)
@@ -58,7 +60,7 @@ def review(review_id):
             abort(400, description="Not a JSON")
 
         data = request.get_json()
-        if not data:            # ############# checker error might be here
+        if not data:
             abort(400, 'Not a JSON')
 
         for k, v in data.items():
