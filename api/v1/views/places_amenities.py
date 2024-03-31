@@ -35,7 +35,7 @@ def place_amenity_route(place_id, amenity_id):
     if not place or not amenity:
         abort(404)
 
-    if request.method = 'DELETE':
+    if request.method == 'DELETE':
         place_amenities = []
         if storage_t == 'db':
             place_amenities = place.amenities
@@ -46,7 +46,7 @@ def place_amenity_route(place_id, amenity_id):
         place_amenities.remove(amenity)
         place.save()
         return {}
-    elif request.method = 'POST':
+    elif request.method == 'POST':
         place_amenities = []
         if storage_t == 'db':
             place_amenities = place.amenities
