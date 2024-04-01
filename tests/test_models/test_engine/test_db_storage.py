@@ -83,26 +83,26 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
+    def TestGetMethodDB(self):
+        """ Tests the get method that returns the
+        required instance with the id """
+        storage = DBStorage()
+        state1 = State()
+        state2 = State()
 
-class TestGetMethodDB(unittest.TestCase):
-    """ Tests the get method that returns the required instance with the id """
-    state1 = State()
-    state2 = State()
+        state = storage.get(State, state1.id)
+        self.assertIsNot(state, None)
+        self.assertIs(state, state1)
+        self.assertIsNot(state, state2)
 
-    state = db_storage.get(State, state1.id)
-    self.assertIsNot(state, None)
-    self.assertIs(state, state1)
-    self.assertIsNot(state, state2)
+        none_state = storage.get(State, 'falseId')
+        self.assertIs(none_state, None)
+        self.assertIsNot(none_state, state1)
 
-    none_state = db_storage.get(State, 'falseId')
-    self.assertIs(none_state, None)
-    self.assertIsNot(none_state, state1)
-
-
-class TestCountMethodDB(unittest.TestCase):
-    """ tests the count method of the storagedb """
-    states = len(db_storage.all(State).values())
-    all = len(db_storage.all().values())
-
-    self.assertEqual(db_storage.count(State), states)
-    self.assertEqual(db_storage.count(), all)
+    def TestCountMethodDB(self):
+        """ tests the count method of the storagedb """
+        storage = DBStorage()
+        states = len(storage.all(State).values())
+        all = len(storage.all().values())
+        self.assertEqual(storage.count(State), states)
+        self.assertEqual(storage.count(), all)
