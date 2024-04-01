@@ -69,6 +69,7 @@ def place(place_id):
         place.save()
         return place.to_dict()
 
+
 @app_views.route('/places_search', methods=["POST"],
                  strict_slashes=False)
 def places_search():
@@ -89,9 +90,23 @@ def places_search():
     if not data or not (states_ids or cities_ids or amenities_ids):
         return jsonify([place.to_dict() for place in places])
 
-    if ("states" not in data or not data["states"]) \
-        and ("cities" not in data or not data["cities"]) \
-        and ("amenities" not in data or not data["amenities"]):
-        return jsonify([place.to_dict()
-                        for place in storage.all(Place).values()
-                        ])
+    # 3. if states or cities not empty, retreive them all
+    states = [storage.get(State, id) for id in states_ids]
+    cities = [storage.get(City, id) for id in cities_ids]
+
+    # 4. retrieve all places in the states and its cities
+    # plus all in the cities unless if it is already listed by the states
+    states_cities = [city for state in states for city in state.cities]
+    req_cities = [city for city in cities if city not in states_cities]
+    req_cities.extend(states_cities)
+
+    # 5. if amenities is not empty, than return all places
+    # with the specified  amenities only, no more, no less.
+    amenities = [storage.get(Amenity, id) for id in amenities_ids]
+    req_places = [place for city in req_cities if city
+                  for place in city.places]
+    req_places = [place.to_dict() for place in req_places if
+                  all(amenity in place.amenities
+                      for amenity in amenities)]
+
+    return jsonify(req_places)
