@@ -85,25 +85,3 @@ def places_search():
         return jsonify([place.to_dict()
                         for place in storage.all(Place).values()
                         ])
-
-    my_places_id = []
-    my_cities_id = []
-    
-    if data["states"]:
-        for state_id in data["states"]:
-            my_cities_id.append(
-                [x.id for x in storage.get(State, state_id).cities
-                 ])
-
-    if data["cities"]:
-        for city_id in data["cities"]:
-            my_cities_id.append(city_id)
-
-    for city_id in my_cities_id:
-        my_places_id.append([
-            x.id for x in storage.get(City, city_id).places
-            ])
-
-    my_places_id = list(set(my_places_id))
-    my_places = [storage.get(Place, x) for x in my_places_id]
-    return jsonify([place.to_dict() for place in my_places])
