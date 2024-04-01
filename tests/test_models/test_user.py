@@ -128,5 +128,8 @@ class TestUser(unittest.TestCase):
     def test_str(self):
         """test that the str method has the correct output"""
         user = User()
-        string = "[User] ({}) {}".format(user.id, user.__dict__)
+        dictionary = dict(user.__dict__)
+        if '_sa_instance_state' in dictionary:
+            del dictionary['_sa_instance_state']
+        string = "[User] ({}) {}".format(user.id, dictionary)
         self.assertEqual(string, str(user))

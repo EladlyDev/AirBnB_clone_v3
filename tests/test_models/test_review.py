@@ -119,5 +119,8 @@ class TestReview(unittest.TestCase):
     def test_str(self):
         """test that the str method has the correct output"""
         review = Review()
-        string = "[Review] ({}) {}".format(review.id, review.__dict__)
+        dictionary = dict(review.__dict__)
+        if '_sa_instance_state' in dictionary:
+            del dictionary['_sa_instance_state']
+        string = "[Review] ({}) {}".format(review.id, dictionary)
         self.assertEqual(string, str(review))
