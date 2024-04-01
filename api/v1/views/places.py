@@ -6,6 +6,7 @@ from models import storage
 from models.state import State
 from models.city import City
 from models.place import Place
+from models.amenity import Amenity
 from models.user import User
 
 
@@ -105,6 +106,10 @@ def places_search():
     amenities = [storage.get(Amenity, id) for id in amenities_ids]
     req_places = [place for city in req_cities if city
                   for place in city.places]
+    
+    if not req_places:
+        req_places = storage.all(Place).values()
+    
     req_places = [place.to_dict() for place in req_places if
                   all(amenity in place.amenities
                       for amenity in amenities)]
