@@ -72,12 +72,22 @@ def place(place_id):
 @app_views.route('/places_search', methods=["POST"],
                  strict_slashes=False)
 def places_search():
-    """ Retrieves the list of all Places filtered by state, city and amenities """
+    """ Retrieves the list of all Places filtered by state,
+    city and amenities """
 
+    # 1. if not valid json abort 400 'Not a JSON'
     if request.content_type != "application/json":
         abort(400, description="Not a JSON")
 
+    places = storage.all(Place).values()
+
+    # 2. if json body is empty or all keys are empty
     data = request.get_json()
+    states_ids = data.get('states', [])
+    cities_ids = data.get('cities', [])
+    amenities_ids = data.get('amenities', [])
+    if not data or not (states_ids or cities_ids or amenities_ids):
+        return jsonify([place.to_dict() for place in places])
 
     if ("states" not in data or not data["states"]) \
         and ("cities" not in data or not data["cities"]) \
