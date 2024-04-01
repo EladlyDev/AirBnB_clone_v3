@@ -116,11 +116,7 @@ def places_search():
     if not req_places:
         req_places = places
 
-    if amenities:
-        req_places = [place.to_dict() for place in req_places
+    req_places = [place.to_dict() for place in req_places
                       if all(amenity in place.amenities
                              for amenity in amenities)]
-    else:
-        req_places = [place.to_dict() for place in req_places]
-
     return jsonify(req_places)
