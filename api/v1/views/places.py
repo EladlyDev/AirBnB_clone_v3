@@ -69,7 +69,7 @@ def place(place_id):
         place.save()
         return place.to_dict()
 
-@app_views.route('/places_search', methods='POST',
+@app_views.route('/places_search', methods=["POST"],
                  strict_slashes=False)
 def places_search():
     """ Retrieves the list of all Places filtered by state, city and amenities """
@@ -86,19 +86,24 @@ def places_search():
                         for place in storage.all(Place).values()
                         ])
 
-    my_places = []
+    my_places_id = []
     my_cities_id = []
     
     if data["states"]:
         for state_id in data["states"]:
-            my_cities_id.append(storage.get(State, state_id).cities.id)
+            my_cities_id.append(
+                [x.id for x in storage.get(State, state_id).cities
+                 ])
 
     if data["cities"]:
         for city_id in data["cities"]:
             my_cities_id.append(city_id)
 
     for city_id in my_cities_id:
-        my_places.append(storage.get(City, city_id).places)
+        my_places_id.append([
+            x.id for x in storage.get(City, city_id).places
+            ])
 
-    my_places = list(set(my_places))
+    my_places_id = list(set(my_places_id))
+    my_places = [storage.get(Place, x) for x in my_places_id]
     return jsonify([place.to_dict() for place in my_places])
