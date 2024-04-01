@@ -3,6 +3,7 @@
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
+from models.state import State
 from models.city import City
 from models.place import Place
 from models.user import User
@@ -58,7 +59,7 @@ def place(place_id):
             abort(400, description="Not a JSON")
 
         data = request.get_json()
-        if not data:            # ############# checker error might be here
+        if not data:
             abort(400, 'Not a JSON')
 
         for k, v in data.items():
@@ -67,3 +68,37 @@ def place(place_id):
                 setattr(place, k, v)
         place.save()
         return place.to_dict()
+
+@app_views.route('/places_search', methods='POST',
+                 strict_slashes=False)
+def places_search():
+    """ Retrieves the list of all Places filtered by state, city and amenities """
+
+    if request.content_type != "application/json":
+        abort(400, description="Not a JSON")
+
+    data = request.get_json()
+
+    if ("states" not in data or not data["states"]) \
+        and ("cities" not in data or not data["cities"]) \
+        and ("amenities" not in data or not data["amenities"]):
+        return jsonify([place.to_dict()
+                        for place in storage.all(Place).values()
+                        ])
+
+    my_places = []
+    my_cities_id = []
+    
+    if data["states"]:
+        for state_id in data["states"]:
+            my_cities_id.append(storage.get(State, state_id).cities.id)
+
+    if data["cities"]:
+        for city_id in data["cities"]:
+            my_cities_id.append(city_id)
+
+    for city_id in my_cities_id:
+        my_places.append(storage.get(City, city_id).places)
+
+    my_places = list(set(my_places))
+    return jsonify([place.to_dict() for place in my_places])
