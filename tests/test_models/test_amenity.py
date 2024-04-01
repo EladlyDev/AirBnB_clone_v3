@@ -101,5 +101,8 @@ class TestAmenity(unittest.TestCase):
     def test_str(self):
         """test that the str method has the correct output"""
         amenity = Amenity()
-        string = "[Amenity] ({}) {}".format(amenity.id, amenity.__dict__)
+        dictionary = dict(amenity.__dict__)
+        if '_sa_instance_state' in dictionary:
+            del dictionary['_sa_instance_state']
+        string = "[Amenity] ({}) {}".format(amenity.id, dictionary)
         self.assertEqual(string, str(amenity))

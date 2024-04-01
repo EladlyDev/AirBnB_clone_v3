@@ -196,5 +196,8 @@ class TestPlace(unittest.TestCase):
     def test_str(self):
         """test that the str method has the correct output"""
         place = Place()
-        string = "[Place] ({}) {}".format(place.id, place.__dict__)
+        dictionary = dict(place.__dict__)
+        if '_sa_instance_state' in dictionary:
+            del dictionary['_sa_instance_state']
+        string = "[Place] ({}) {}".format(place.id, dictionary)
         self.assertEqual(string, str(place))
