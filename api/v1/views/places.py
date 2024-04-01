@@ -117,9 +117,9 @@ def places_search():
         req_places = places
 
     if amenities:
-        req_places = [place.to_dict() for place in req_places if 
-                      all(amenity in place.amenities
-                        for amenity in amenities)]
+        req_places = [place.to_dict() for place in req_places
+                      if all(amenity in place.amenities
+                             for amenity in amenities)]
     else:
         req_places = [place.to_dict() for place in req_places]
 
