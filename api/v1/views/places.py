@@ -95,7 +95,8 @@ def places_search():
     states = [storage.get(State, id) for id in states_ids]
     cities = [storage.get(City, id) for id in cities_ids]
 
-    # drop none values in states and cities lists that comes if storage.get returns None
+    # drop none values in states and cities lists
+    # that comes if storage.get returns None
     states = [state for state in states if state]
     cities = [city for city in cities if city]
 
@@ -108,14 +109,18 @@ def places_search():
     # 5. if amenities is not empty, than return all places
     # with the specified  amenities only, no more, no less.
     amenities = [storage.get(Amenity, id) for id in amenities_ids]
+    amenities = [amenity for amenity in amenities]
+
     req_places = [place for city in req_cities
                   for place in city.places]
-
     if not req_places:
-        req_places = storage.all(Place).values()
+        req_places = places
 
-    req_places = [place.to_dict() for place in req_places if
-                  all(amenity in place.amenities
-                      for amenity in amenities)]
+    if amenities:
+        req_places = [place.to_dict() for place in req_places if 
+                      all(amenity in place.amenities
+                        for amenity in amenities)]
+    else:
+        req_places = [place.to_dict() for place in req_places]
 
     return jsonify(req_places)
